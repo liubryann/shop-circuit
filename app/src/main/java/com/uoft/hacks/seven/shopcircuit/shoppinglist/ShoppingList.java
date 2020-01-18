@@ -1,38 +1,33 @@
 package com.uoft.hacks.seven.shopcircuit.shoppinglist;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class ShoppingList {
-  private HashMap<Item, Integer> shoppingList;
+  private ArrayList<Item> shoppingList;
 
   public ShoppingList(){
-    shoppingList = new HashMap<>();
+    shoppingList = new ArrayList<>();
   }
 
-  public void addItemToCart(Item item, Integer amount){
-    for (Item shoppingItem : shoppingList.keySet()){
-      if (shoppingItem.getName().equals(item.getName())){
-        Integer oldAmount = shoppingList.get(shoppingItem);
-        shoppingList.remove(shoppingItem);
-        shoppingList.put(item, oldAmount + amount);
-        return;
-      }
-    }
-
-    //sql stuff?
-
-    shoppingList.put(item, amount);
+  public void addItemToList(Item item){
+    shoppingList.add(item);
   }
 
-  public void removeItemFromCart(Item item){
-    for (Item shoppingItem : shoppingList.keySet()){
-      if(shoppingItem.getName().equals(item.getName())){
-        shoppingList.remove(shoppingItem);
+  public void removeItemFromList(Item item){
+    Iterator<Item> iter = shoppingList.iterator();
+    Item listItem;
+    while (iter.hasNext()) {
+      listItem = iter.next();
+      if (listItem.getName().equals(item.getName())) {
+        iter.remove();
       }
     }
   }
 
-  public HashMap<Item, Integer> getShoppingList(){
+  public ArrayList<Item> getShoppingList(){
     return shoppingList;
   }
 
