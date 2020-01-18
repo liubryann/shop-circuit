@@ -1,3 +1,8 @@
 <resources>
   <string name="app_name">ShopCircuit</string>
+  <!--Bryan-->
+  <string name="shopping_list">Shopping List</string>
+  <string name="add_item">Add Item</string>
+  <string name="clear">Clear</string>
+  <string name="delete">Delete</string>
 </resources>
