@@ -152,9 +152,8 @@ public class MapActivity extends AppCompatActivity {
         }
       }
     }
-    nodes.add(dest);
     Stack<Pair<Integer, Integer>>[] pathLocal = new Stack[nodes.size()];
-    map.findPath(map.getStart(), nodes, 0, pathLocal, 0);
+    map.findPath(dest, map.getStart(), nodes, 0, map.getShortestPath(), 0);
 
     shortestPath = map.getShortestPath();
 

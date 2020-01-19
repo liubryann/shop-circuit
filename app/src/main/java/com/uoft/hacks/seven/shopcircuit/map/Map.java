@@ -43,7 +43,7 @@ public class Map {
 
     numShelf = 0;
     shortestDistance = Integer.MAX_VALUE;
-    shortestPath = new Stack[n];
+    shortestPath = new Stack[n + 1];
   }
 
   public List<Shelf> getShelves(){
@@ -402,11 +402,35 @@ public class Map {
     return start;
   }
 
-  public void findPath(Pair<Integer, Integer> start, List<Pair<Integer, Integer>> nodes,
-      double distance, Stack<Pair<Integer, Integer>>[] path, int depth) {
+//  public void findPath(Pair<Integer, Integer> exit, Pair<Integer, Integer> start, List<Pair<Integer, Integer>> nodes,
+//      double distance, Stack<Pair<Integer, Integer>>[] path, int depth) {
+//
+//    if (nodes.isEmpty() && distance < shortestDistance) {
+//      shortestDistance = distance + findDistance(aStarSearch(start, exit));
+//      path[depth + 1] = aStarSearch(start, exit);
+//      shortestPath = path;
+//    }
+//
+//    for (int i = 0; i < nodes.size(); i++) {
+//      path[depth] = (aStarSearch(start, nodes.get(i)));
+//      List<Pair<Integer, Integer>> pass = new ArrayList<>(nodes);
+//      pass.remove(i);
+//      System.out.println("this is the size " + nodes.size());
+//      if (!nodes.isEmpty()) {
+//        findPath(exit, nodes.get(i), pass, distance + findDistance(aStarSearch(start, nodes.get(i))),
+//            path, depth);
+//      }
+//    }
+//  }
 
+  public void findPath(Pair<Integer, Integer> exit, Pair<Integer, Integer> start, List<Pair<Integer, Integer>> nodes, double distance, Stack<Pair<Integer, Integer>>[] path, int depth) {
+
+    if (depth == path.length - 1){
+      distance = distance + findDistance(aStarSearch(start, exit));
+      path[depth] = aStarSearch(start, exit);
+    }
     if (nodes.isEmpty() && distance < shortestDistance) {
-      shortestDistance = distance;// + findDistance(aStarSearch(trueStart, trueEnd));
+      shortestDistance = distance + findDistance(aStarSearch(start, exit));
       shortestPath = path;
       //System.out.println("AKASJDFL;AKJSDF;LKAJSD;LF " + path.size());
     }
@@ -422,48 +446,97 @@ public class Map {
       //System.out.println("i: " + nodes.get(i).first + " j: " + nodes.get(i).getSecond());
       System.out.println("this is the size " + nodes.size());
       if (!nodes.isEmpty()) {
-        findPath(nodes.get(i), pass, distance + findDistance(aStarSearch(start, nodes.get(i))),
-            path, depth + 1);
+        findPath(exit, nodes.get(i), pass, distance + findDistance(aStarSearch(start, nodes.get(i))), path, depth + 1);
       }
     }
   }
 
-  public static void main(String arg[]) {
-    /* Description of the Grid-
-     1--> The cell is not blocked
-     0--> The cell is blocked    */
+//  public void findPath(Pair<Integer, Integer> start, List<Pair<Integer, Integer>> nodes,
+//      double distance, Stack<Pair<Integer, Integer>>[] path, int depth) {
+//
+//    if (nodes.isEmpty() && distance < shortestDistance) {
+//      shortestDistance = distance;// + findDistance(aStarSearch(trueStart, trueEnd));
+//      shortestPath = path;
+//      //System.out.println("AKASJDFL;AKJSDF;LKAJSD;LF " + path.size());
+//    }
+//
+//    for (int i = 0; i < nodes.size(); i++) {
+//      //System.out.print("This is the call for: ");
+//      //System.out.print("s_i: " + start.first + " s_j: " + start.second + "towards ====");
+//      //System.out.println("i: " + nodes.get(i).first + " j: " + nodes.get(i).getSecond());
+//
+//      path[depth] = (aStarSearch(start, nodes.get(i)));
+//      List<Pair<Integer, Integer>> pass = new ArrayList<>(nodes);
+//      pass.remove(i);
+//      //System.out.println("i: " + nodes.get(i).first + " j: " + nodes.get(i).getSecond());
+//      System.out.println("this is the size " + nodes.size());
+//      if (!nodes.isEmpty()) {
+//        findPath(nodes.get(i), pass, distance + findDistance(aStarSearch(start, nodes.get(i))),
+//            path, depth + 1);
+//      }
+//    }
+//  }
 
-    for (int i = 0; i < x; i++) {
-      System.out.print(i + " :");
-      for (int j = 0; j < y; j++) {
-        System.out.print(grid[i][j]);
-      }
-      System.out.println();
+//  public void findPath(Pair<Integer, Integer> exit, Pair<Integer, Integer> start, List<Pair<Integer, Integer>> nodes,
+////      double distance, Stack<Pair<Integer, Integer>>[] path, int depth) {
+////
+////    if (depth == shortestPath.length - 1){
+////      distance = distance + findDistance(aStarSearch(start, exit));
+////      path[depth + 1] = aStarSearch(start, exit);
+////    }
+////    if (nodes.isEmpty() && distance < shortestDistance) {
+////      shortestDistance = distance;
+////      shortestPath = path;
+////    }
+////
+////    for (int i = 0; i < nodes.size(); i++) {
+////      path[depth] = (aStarSearch(start, nodes.get(i)));
+////      List<Pair<Integer, Integer>> pass = new ArrayList<>(nodes);
+////      pass.remove(i);
+////      System.out.println("this is the size " + nodes.size());
+////      if (!nodes.isEmpty()) {
+////        findPath(exit, nodes.get(i), pass, distance + findDistance(aStarSearch(start, nodes.get(i))),
+////            path, depth + 1);
+////      }
+////    }
+////  }
 
-    }
-    //Pair<Integer, Integer> src = new Pair<>(4,2);
-    //Pair<Integer, Integer> src = new Pair<>(7,0);
-    //Pair<Integer, Integer> dest = new Pair<>(8,0);
-    //Map map = new Map(x,y);
-    //map.shortestPath.add(map.aStarSearch( src, dest));
-    System.out.println("======================================");
-    //Pair<Integer, Integer> src = new Pair<>(8, 0);
-    // Pair<Integer, Integer> dest = new Pair<>(0, 0);
-    //(new Map(x,y)).aStarSearch( src, dest);
-
-    List nodes = new ArrayList<Pair<Integer, Integer>>();
-    nodes.add(new Pair<>(8, 0));
-    nodes.add(new Pair<>(4, 2));
-    nodes.add(new Pair<>(0, 0));
-    Map map = new Map(x, y, nodes.size());
-    Stack<Pair<Integer, Integer>>[] pathLocal = new Stack[nodes.size()];
-    map.findPath(new Pair<>(7, 8), nodes, 0, pathLocal, 0);
-
-    System.out.println(map.shortestPath.length);
-    for (int i = 0; i < map.shortestPath.length; i++) {
-      System.out.println(map.shortestPath[i]);
-    }
-  }
+//  public static void main(String arg[]) {
+//    /* Description of the Grid-
+//     1--> The cell is not blocked
+//     0--> The cell is blocked    */
+//
+//    for (int i = 0; i < x; i++) {
+//      System.out.print(i + " :");
+//      for (int j = 0; j < y; j++) {
+//        System.out.print(grid[i][j]);
+//      }
+//      System.out.println();
+//
+//    }
+//    //Pair<Integer, Integer> src = new Pair<>(4,2);
+//    //Pair<Integer, Integer> src = new Pair<>(7,0);
+//    //Pair<Integer, Integer> dest = new Pair<>(8,0);
+//    //Map map = new Map(x,y);
+//    //map.shortestPath.add(map.aStarSearch( src, dest));
+//    System.out.println("======================================");
+//    //Pair<Integer, Integer> src = new Pair<>(8, 0);
+//    // Pair<Integer, Integer> dest = new Pair<>(0, 0);
+//    //(new Map(x,y)).aStarSearch( src, dest);
+//
+//    List nodes = new ArrayList<Pair<Integer, Integer>>();
+//    nodes.add(new Pair<>(8, 0));
+//    nodes.add(new Pair<>(4, 2));
+//    nodes.add(new Pair<>(0, 0));
+//    Map map = new Map(x, y, nodes.size());
+//    Stack<Pair<Integer, Integer>>[] pathLocal = new Stack[nodes.size()];
+//    map.findPath(new Pair<>(7, 8), nodes, 0, pathLocal, 0);
+//
+//    System.out.println(map.shortestPath.length);
+//    for (int i = 0; i < map.shortestPath.length; i++) {
+//      System.out.println(map.shortestPath[i]);
+//    }
+//  }
 }
 
 
