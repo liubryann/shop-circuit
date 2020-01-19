@@ -38,7 +38,7 @@ public class MapActivity extends AppCompatActivity {
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.map_layout);
-    map = new Map( N, N);
+    map = new Map( N, N, N);
     shelves = map.getShelves();
     shoppingList = new ShoppingList();
     itemList = shoppingList.getShoppingList();
@@ -149,7 +149,7 @@ public class MapActivity extends AppCompatActivity {
     }
 
 
-    map.findPath(nodes, 0, path);
+//    map.findPath(nodes, 0, path);
 
   }
 
