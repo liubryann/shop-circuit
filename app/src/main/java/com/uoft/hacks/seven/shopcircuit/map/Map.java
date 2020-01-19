@@ -26,6 +26,8 @@ public class Map {
   private int numShelf;
   private double shortestDistance;
   private Stack<Pair<Integer, Integer>>[] shortestPath;
+  Pair<Integer, Integer> start;
+  Pair<Integer, Integer> dest;
 
   Map(int x, int y, int n) {
 
@@ -41,7 +43,7 @@ public class Map {
 
     numShelf = 0;
     shortestDistance = Integer.MAX_VALUE;
-    shortestPath = new Stack[n + 1];
+    shortestPath = new Stack[n];
   }
 
   public List<Shelf> getShelves(){
@@ -52,7 +54,9 @@ public class Map {
     return grid;
   }
 
-
+  public Stack<Pair<Integer, Integer>>[] getShortestPath(){
+    return shortestPath;
+  }
 
   public void addShelf(int x, int y, int x_size, int y_size, List<String> categories){
     Shelf shelf = new Shelf(x, y, x_size, y_size, categories);
@@ -74,6 +78,9 @@ public class Map {
     int door = -1;
     if (exit) {
       door = -2;
+      dest = new Pair<>(x,y);
+    }else{
+      start = new Pair<>(x, y);
     }
 
     try{
@@ -389,6 +396,10 @@ public class Map {
       }
     }
     return distance;
+  }
+
+  public Pair<Integer,Integer> getStart(){
+    return start;
   }
 
   public void findPath(Pair<Integer, Integer> start, List<Pair<Integer, Integer>> nodes,

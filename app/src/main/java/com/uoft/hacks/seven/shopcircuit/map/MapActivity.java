@@ -32,6 +32,9 @@ public class MapActivity extends AppCompatActivity {
   List<Shelf> shelves;
   List<Pair<Integer, Integer>> nodes;
   ArrayList<Stack> path = new ArrayList<>();
+  Pair<Integer, Integer> dest;
+  Stack<Pair<Integer, Integer>>[] shortestPath;
+  int grid[][];
 
 
   @Override
@@ -94,7 +97,7 @@ public class MapActivity extends AppCompatActivity {
       parsedX1 = Integer.parseInt(sXY.substring(0, sXY.indexOf(",")));
       parsedY1 = Integer.parseInt(sXY.substring(sXY.indexOf(",") + 1));
       parsedXSize = Integer.parseInt(sXY2.substring(0, sXY2.indexOf(",")));
-      parsedYSize = Integer.parseInt(sXY2.substring(sXY2.indexOf(":") + 1));
+      parsedYSize = Integer.parseInt(sXY2.substring(sXY2.indexOf(",") + 1));
 
     }
     else{
@@ -102,6 +105,7 @@ public class MapActivity extends AppCompatActivity {
     }
 
     map.addDoor(parsedX1, parsedY1, parsedXSize, parsedYSize, true);
+    dest = new Pair<>(parsedX1, parsedY1);
 
     fillTable(N, map.getGrid(), matrix);
 
@@ -138,6 +142,7 @@ public class MapActivity extends AppCompatActivity {
   }
 
   public void findPath(View v){
+    grid = map.getGrid();
     for (Item item: itemList){
       for (Shelf shelf : shelves){
         for (String category : shelf.getCategories()){
@@ -147,6 +152,21 @@ public class MapActivity extends AppCompatActivity {
         }
       }
     }
+    nodes.add(dest);
+    Stack<Pair<Integer, Integer>>[] pathLocal = new Stack[nodes.size()];
+    map.findPath(map.getStart(), nodes, 0, pathLocal, 0);
+
+    shortestPath = map.getShortestPath();
+
+    for (int i =0; i < shortestPath.length; i++){
+      while (!shortestPath[i].isEmpty()){
+        Pair<Integer, Integer> pair = shortestPath[i].pop();
+        grid[pair.first][pair.second] = 100;
+      }
+    }
+
+    fillTable(N, grid, matrix);
+
 
 
 //    map.findPath(nodes, 0, path);
@@ -175,6 +195,10 @@ public class MapActivity extends AppCompatActivity {
 
         if(matrix[i][j] > 0){
           edit.setBackground(getResources().getDrawable(R.drawable.shelf));
+        }
+
+        if(matrix[i][j] == 100){
+          edit.setBackground(getResources().getDrawable(R.drawable.path));
         }
 
         edit.setText("     ");
