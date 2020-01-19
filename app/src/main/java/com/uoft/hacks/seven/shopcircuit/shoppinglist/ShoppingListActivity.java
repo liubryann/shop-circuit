@@ -117,5 +117,10 @@ public class ShoppingListActivity extends ListActivity {
       selected.add(cView.getText().toString());
     }
   }
+
+  @Override
+  public void onBackPressed() {
+
+  }
 }
 

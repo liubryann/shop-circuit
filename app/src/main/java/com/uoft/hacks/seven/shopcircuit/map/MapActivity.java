@@ -19,4 +19,9 @@ public class MapActivity extends AppCompatActivity {
     mapToShoppingList.setOnClickListener(new ShoppingListButton(this));
 
   }
+
+  @Override
+  public void onBackPressed() {
+
+  }
 }
