@@ -5,13 +5,18 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import com.uoft.hacks.seven.shopcircuit.R;
+import com.uoft.hacks.seven.shopcircuit.map.MapButtonController;
 import java.util.ArrayList;
 
 public class ShoppingListActivity extends ListActivity {
+  private Button mapButton;
+  private Button shoppingListButton;
+
   private ShoppingList shoppingList;
   Item item;
   private ArrayList<String> listItems = new ArrayList<>();
@@ -32,6 +37,11 @@ public class ShoppingListActivity extends ListActivity {
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.shopping_list_layout);
+
+    mapButton = findViewById(R.id.shopListToMapButton);
+    mapButton.setOnClickListener(new MapButtonController(this));
+//    shoppingListButton = findViewById(R.id.shoppingListButtonNothing);
+//    shoppingListButton.setBackgroundColor(R.color.darkGrey);
 
     shoppingList = new ShoppingList();
 

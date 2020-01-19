@@ -4,13 +4,20 @@
   android:layout_height="fill_parent">
   <TextView
     android:layout_width="match_parent"
-    android:layout_height="20dp"
-    android:text="@string/shopping_list"/>
+    android:layout_height="30dp"
+    android:text="@string/shopping_list"
+    android:layout_marginStart="10dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="10dp"
+    android:textSize="20sp"
+    />
 
   <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="10dp">
     <TextView
       android:layout_width="0dp"
       android:layout_height="wrap_content"
@@ -21,7 +28,8 @@
       android:id="@+id/autoCompleteItem"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_weight="0.4">
+      android:layout_weight="0.4"
+      android:layout_marginEnd="5dp">
       <requestFocus/>
     </AutoCompleteTextView>
     <TextView
@@ -29,6 +37,7 @@
       android:layout_height="wrap_content"
       android:layout_weight="0.2"
       android:text="@string/category"
+      android:layout_marginStart="5dp"
       />
     <AutoCompleteTextView
       android:id="@+id/autoCompleteCategory"
@@ -38,16 +47,9 @@
     </AutoCompleteTextView>
   </LinearLayout>
 
-    <ListView
-      android:id="@android:id/list"
-      android:layout_width="match_parent"
-      android:layout_height="0dp"
-      android:layout_weight="1"
-      android:drawSelectorOnTop="true"/>
-
   <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="30dp"
     android:orientation="horizontal">
     <Button
       android:id="@+id/clearButton"
@@ -56,6 +58,10 @@
       android:layout_height="wrap_content"
       android:text="@string/clear"
       android:onClick="clear"
+      android:background="@drawable/rounded_20dp"
+      android:backgroundTint="@color/lightGrey"
+      android:layout_marginStart="35dp"
+      android:layout_marginEnd="5dp"
       />
 
     <Button
@@ -65,6 +71,10 @@
       android:layout_height="wrap_content"
       android:text="@string/delete"
       android:onClick="delete"
+      android:background="@drawable/rounded_20dp"
+      android:backgroundTint="@color/lightGrey"
+      android:layout_marginStart="5dp"
+      android:layout_marginEnd="5dp"
       />
     <Button
       android:id="@+id/addItemButton"
@@ -73,9 +83,52 @@
       android:layout_height="wrap_content"
       android:text="@string/add_item"
       android:onClick="addItems"
+      android:background="@drawable/rounded_20dp"
+      android:backgroundTint="@color/lightGrey"
+      android:layout_marginStart="5dp"
+      android:layout_marginEnd="35dp"
       />
+  </LinearLayout>
+
+    <ListView
+      android:id="@android:id/list"
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_weight="1"
+      android:drawSelectorOnTop="true"
+      android:layout_marginStart="10dp"
+      android:layout_marginEnd="10dp"/>
 
 
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:orientation="horizontal"
+    android:layout_marginTop="10dp">
+    <Button
+      android:id="@+id/shopListToMapButton"
+      android:layout_width="0dp"
+      android:layout_weight="0.5"
+      android:layout_height="match_parent"
+      android:text="@string/map"
+      android:background="@drawable/rounded_20dp"
+      android:backgroundTint="@color/lightGrey"
+      android:layout_marginStart="10dp"
+      android:layout_marginEnd="5dp"
+      android:layout_marginBottom="10dp"
+      />
+    <Button
+      android:id="@+id/shoppingListButtonNothing"
+      android:layout_width="0dp"
+      android:layout_height="match_parent"
+      android:layout_weight="0.5"
+      android:text="@string/shopping_list"
+      android:background="@drawable/rounded_20dp"
+      android:backgroundTint="@color/midGrey"
+      android:layout_marginStart="5dp"
+      android:layout_marginEnd="10dp"
+      android:layout_marginBottom="10dp"/>
   </LinearLayout>
 
 
