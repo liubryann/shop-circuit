@@ -2,6 +2,7 @@ package com.uoft.hacks.seven.shopcircuit.map;
 
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -10,36 +11,43 @@ import android.widget.TableRow;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.uoft.hacks.seven.shopcircuit.R;
+import com.uoft.hacks.seven.shopcircuit.shoppinglist.Item;
+import com.uoft.hacks.seven.shopcircuit.shoppinglist.ShoppingList;
 import com.uoft.hacks.seven.shopcircuit.shoppinglist.ShoppingListButton;
+import java.io.StringBufferInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Stack;
 
 public class MapActivity extends AppCompatActivity {
   Button mapToShoppingList;
   TableLayout matrix;
-  EditText x1, y1, xSize, ySize;
-  String[] categories ={"Fruits", "Meats", "Electronics", "Furniture", "Toiletries" };
-  List<String> list = Arrays.asList(categories);
-
+  EditText xy, xy2, category;
 
   int N = 13;
   private Map map;
+  private ShoppingList shoppingList;
+  ArrayList<Item> itemList;
+  List<Shelf> shelves;
+  List<Pair<Integer, Integer>> nodes;
+  ArrayList<Stack> path = new ArrayList<>();
+
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.map_layout);
     map = new Map( N, N);
+    shelves = map.getShelves();
+    shoppingList = new ShoppingList();
+    itemList = shoppingList.getShoppingList();
+    nodes = new ArrayList<>();
 
-    x1 = findViewById(R.id.x1);
-    y1 = findViewById(R.id.y1);
-    xSize = findViewById(R.id.xsize);
-    ySize = findViewById(R.id.ysize);
-    x1.setTransformationMethod(null);
-    y1.setTransformationMethod(null);
-    xSize.setTransformationMethod(null);
-    ySize.setTransformationMethod(null );
+
+    xy = findViewById(R.id.xy);
+    xy2 = findViewById(R.id.xy2);
+    category = findViewById(R.id.category);
 
 
     mapToShoppingList = findViewById(R.id.mapToShoppingListButton);
@@ -51,19 +59,16 @@ public class MapActivity extends AppCompatActivity {
 
   //-1
   public void addEntrance(View v){
-    String sX1 = x1.getText().toString();
-    String sY1 = y1.getText().toString();
-    String sXSize = xSize.getText().toString();
-    String sYSize = ySize.getText().toString();
+    String sXY = xy.getText().toString();
+    String sXY2 = xy2.getText().toString();
 
     int parsedX1, parsedY1, parsedXSize, parsedYSize;
 
-    if (!(sX1.equals("") || sY1.equals("") || sXSize.equals("") || sYSize.equals(""))){
-      parsedX1 = Integer.parseInt(sX1);
-      parsedY1 = Integer.parseInt(sY1);
-      parsedXSize = Integer.parseInt(sXSize);
-      parsedYSize = Integer.parseInt(sYSize);
-
+    if (!(sXY.equals("") || sXY2.equals(""))){
+      parsedX1 = Integer.parseInt(sXY.substring(0, sXY.indexOf(",")));
+      parsedY1 = Integer.parseInt(sXY.substring(sXY.indexOf(",") + 1));
+      parsedXSize = Integer.parseInt(sXY2.substring(0, sXY2.indexOf(",")));
+      parsedYSize = Integer.parseInt(sXY2.substring(sXY2.indexOf(",")+1));
     }
     else{
       return;
@@ -73,26 +78,24 @@ public class MapActivity extends AppCompatActivity {
 
     fillTable(N, map.getGrid(), matrix);
 
-    x1.setText("");
-    y1.setText("");
-    xSize.setText("");
-    ySize.setText("");
+    xy.setText("");
+    xy2.setText("");
+    category.setText("");
   }
 
   //-2
   public void addExit(View v){
-    String sX1 = x1.getText().toString();
-    String sY1 = y1.getText().toString();
-    String sXSize = xSize.getText().toString();
-    String sYSize = ySize.getText().toString();
+    String sXY = xy.getText().toString();
+    String sXY2 = xy2.getText().toString();
 
     int parsedX1, parsedY1, parsedXSize, parsedYSize;
 
-    if (!(sX1.equals("") || sY1.equals("") || sXSize.equals("") || sYSize.equals(""))){
-      parsedX1 = Integer.parseInt(sX1);
-      parsedY1 = Integer.parseInt(sY1);
-      parsedXSize = Integer.parseInt(sXSize);
-      parsedYSize = Integer.parseInt(sYSize);
+    if (!(sXY.equals("") || sXY2.equals(""))){
+      parsedX1 = Integer.parseInt(sXY.substring(0, sXY.indexOf(",")));
+      parsedY1 = Integer.parseInt(sXY.substring(sXY.indexOf(",") + 1));
+      parsedXSize = Integer.parseInt(sXY2.substring(0, sXY2.indexOf(",")));
+      parsedYSize = Integer.parseInt(sXY2.substring(sXY2.indexOf(":") + 1));
+
     }
     else{
       return;
@@ -101,40 +104,52 @@ public class MapActivity extends AppCompatActivity {
     map.addDoor(parsedX1, parsedY1, parsedXSize, parsedYSize, true);
 
     fillTable(N, map.getGrid(), matrix);
-    x1.setText("");
-    y1.setText("");
-    xSize.setText("");
-    ySize.setText("");
+
+    xy.setText("");
+    xy2.setText("");
+    category.setText("");
   }
 
-  public void addShelf(View v){
-    String sX1 = x1.getText().toString();
-    String sY1 = y1.getText().toString();
-    String sXSize = xSize.getText().toString();
-    String sYSize = ySize.getText().toString();
+  public void addShelf(View v) {
+    String sXY = xy.getText().toString();
+    String sXY2 = xy2.getText().toString();
+    String sCategory = category.getText().toString();
 
     int parsedX1, parsedY1, parsedXSize, parsedYSize;
 
-    if (!(sX1.equals("") || sY1.equals("") || sXSize.equals("") || sYSize.equals(""))){
-      parsedX1 = Integer.parseInt(sX1);
-      parsedY1 = Integer.parseInt(sY1);
-      parsedXSize = Integer.parseInt(sXSize);
-      parsedYSize = Integer.parseInt(sYSize);
-
-    }
-    else{
+    if (!(sXY.equals("") || sXY2.equals("") || sCategory.equals(""))) {
+      parsedX1 = Integer.parseInt(sXY.substring(0, sXY.indexOf(",")));
+      parsedY1 = Integer.parseInt(sXY.substring(sXY.indexOf(",")+1));
+      parsedXSize = Integer.parseInt(sXY2.substring(0, sXY2.indexOf(",")));
+      parsedYSize = Integer.parseInt(sXY2.substring(sXY2.indexOf(",")+1));
+    } else {
       return;
     }
+    ArrayList<String> list = new ArrayList<>();
+    list.add(sCategory);
 
     map.addShelf(parsedX1, parsedY1, parsedXSize, parsedYSize, list);
 
     fillTable(N, map.getGrid(), matrix);
 
-    x1.setText("");
-    y1.setText("");
-    xSize.setText("");
-    ySize.setText("");
+    xy.setText("");
+    xy2.setText("");
+    category.setText("");
+  }
 
+  public void findPath(View v){
+    for (Item item: itemList){
+      for (Shelf shelf : shelves){
+        for (String category : shelf.getCategories()){
+          if (item.getCategory().equals(category)){
+            nodes.add(shelf.getPosition());
+          }
+        }
+      }
+    }
+
+
+    map.findPath(nodes, 0, path);
 
   }
 

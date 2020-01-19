@@ -4,11 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class ShoppingList {
-  private ArrayList<Item> shoppingList;
-
-  public ShoppingList(){
-    shoppingList = new ArrayList<>();
-  }
+  private static ArrayList<Item> shoppingList = new ArrayList<>();
 
   public void addItemToList(Item item){
     shoppingList.add(item);

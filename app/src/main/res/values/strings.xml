@@ -17,5 +17,8 @@
   <string name="y1">y1</string>
   <string name="xsize">xsize</string>
   <string name="ysize">ysize</string>
+  <string name="xy">x,y</string>
+  <string name="xy2">xsize,ysize</string>
+  <string name="lCategory">category</string>
 
 </resources>

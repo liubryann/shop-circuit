@@ -43,6 +43,10 @@ public class Map {
     shortestDistance = Integer.MAX_VALUE;
   }
 
+  public List<Shelf> getShelves(){
+    return shelves;
+  }
+
   public int[][] getGrid(){
     return grid;
   }
@@ -465,7 +469,7 @@ public class Map {
     return distance;
   }
 
-  private void findPath(List<Pair<Integer, Integer>> nodes, double distance, ArrayList<Stack> path) {
+  public void findPath(List<Pair<Integer, Integer>> nodes, double distance, ArrayList<Stack> path) {
 
     if (nodes.isEmpty() && distance < shortestDistance) {
       shortestDistance = distance;
