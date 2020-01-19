@@ -1,5 +1,5 @@
 # shop-circuit
-[Submission](https://devpost.com/software/shop-circuit) for UofTHacks VII
+[Submission](https://devpost.com/software/shop-circuit) for UofTHacks VII: Utilizes a pathfinding algorithm visualizer to determine optimal shopping routes. 
 
 ## Inspiration
 When we go grocery shopping, it's difficult to find the items we need and end up wandering in circles. As busy CS students, it is important that we don't waste time so finding the most effective route around a grocery store would be beneficial to us.
