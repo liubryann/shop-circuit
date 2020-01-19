@@ -41,7 +41,7 @@ public class MapActivity extends AppCompatActivity {
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.map_layout);
-    map = new Map( N, N, N);
+    map = new Map( N, N);
     shelves = map.getShelves();
     shoppingList = new ShoppingList();
     itemList = shoppingList.getShoppingList();
@@ -152,7 +152,8 @@ public class MapActivity extends AppCompatActivity {
         }
       }
     }
-    Stack<Pair<Integer, Integer>>[] pathLocal = new Stack[nodes.size()];
+//    Stack<Pair<Integer, Integer>>[] pathLocal = new Stack[nodes.size()];
+    map.setN(nodes.size());
     map.findPath(dest, map.getStart(), nodes, 0, map.getShortestPath(), 0);
 
     shortestPath = map.getShortestPath();

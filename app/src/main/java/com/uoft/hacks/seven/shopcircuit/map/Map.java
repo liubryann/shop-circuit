@@ -28,8 +28,9 @@ public class Map {
   private Stack<Pair<Integer, Integer>>[] shortestPath;
   Pair<Integer, Integer> start;
   Pair<Integer, Integer> dest;
+  int n;
 
-  Map(int x, int y, int n) {
+  Map(int x, int y) {
 
     this.x = x;
     this.y = y;
@@ -43,9 +44,12 @@ public class Map {
 
     numShelf = 0;
     shortestDistance = Integer.MAX_VALUE;
-    shortestPath = new Stack[n + 1];
   }
 
+  public void setN(int n){
+    this.n = n;
+    shortestPath = new Stack[n +1];
+  }
   public List<Shelf> getShelves(){
     return shelves;
   }
