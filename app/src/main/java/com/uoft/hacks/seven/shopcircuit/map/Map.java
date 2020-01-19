@@ -8,8 +8,9 @@ import java.util.PriorityQueue;
 import java.util.Stack;
 
 public class Map {
+
   private static int grid[][] = {};
-//      {
+  //      {
 //          { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 //          { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 //          { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -24,39 +25,39 @@ public class Map {
   private static int y;
   private List<Shelf> shelves = new ArrayList<>();
   private int numShelf;
-  private ArrayList<Stack> shortestPath;
   private double shortestDistance;
+  private Stack<Pair<Integer, Integer>>[] shortestPath;
 
-  Map(int x, int y){
+  Map(int x, int y, int n) {
 
     this.x = x;
     this.y = y;
     grid = new int[x][y];
 
-    for (int i = 0; i < x; i++){
-      for (int j = 0; j < y; j++){
+    for (int i = 0; i < x; i++) {
+      for (int j = 0; j < y; j++) {
         grid[i][j] = 0;
       }
     }
 
     numShelf = 0;
     shortestDistance = Integer.MAX_VALUE;
+    shortestPath = new Stack[n + 1];
   }
 
-  public int[][] getGrid(){
+  public int[][] getGrid() {
     return grid;
   }
 
 
-
-  public void addShelf(int x, int y, int x_size, int y_size, List<String> categories){
+  public void addShelf(int x, int y, int x_size, int y_size, List<String> categories) {
     Shelf shelf = new Shelf(x, y, x_size, y_size, categories);
     shelves.add(numShelf, shelf);
     numShelf++;
 
-    try{
-      for (int i = x; i < x + x_size; i++){
-        for (int j = y; j < y+ y_size; j++){
+    try {
+      for (int i = x; i < x + x_size; i++) {
+        for (int j = y; j < y + y_size; j++) {
           grid[j][i] = numShelf;
         }
       }
@@ -65,15 +66,15 @@ public class Map {
     }
   }
 
-  public void addDoor(int x, int y, int x_size, int y_size, boolean exit){
+  public void addDoor(int x, int y, int x_size, int y_size, boolean exit) {
     int door = -1;
     if (exit) {
       door = -2;
     }
 
-    try{
-      for (int i = x; i < x + x_size; i++){
-        for (int j = y; j < y + y_size; j++){
+    try {
+      for (int i = x; i < x + x_size; i++) {
+        for (int j = y; j < y + y_size; j++) {
           grid[j][i] = door;
         }
       }
@@ -82,13 +83,14 @@ public class Map {
     }
   }
 
-  private Stack<Pair<Integer, Integer>> aStarSearch(Pair<Integer, Integer> src, Pair<Integer, Integer> dest ){
+  private Stack<Pair<Integer, Integer>> aStarSearch(Pair<Integer, Integer> src,
+      Pair<Integer, Integer> dest) {
     Stack<Pair<Integer, Integer>> path = new Stack<>();
     int[][] closedList = new int[x][y];
     Cell[][] cells = new Cell[x][y];
 
-    for (int i = 0; i < x; i++){
-      for (int j = 0; j < y; j++){
+    for (int i = 0; i < x; i++) {
+      for (int j = 0; j < y; j++) {
         cells[i][j] = new Cell(-1, -1, Double.MAX_VALUE, Double.MAX_VALUE);
       }
     }
@@ -110,406 +112,343 @@ public class Map {
         });
     openList.add(new Pair<>(0.0, new Pair<>(i, j)));
     boolean foundDest = false;
-    while (!openList.isEmpty()){
+    while (!openList.isEmpty()) {
+      //System.out.println(Arrays.toString(openList.toArray()));
       Pair<Double, Pair<Integer, Integer>> current = openList.poll();
+
       i = current.second.first;
+      //System.out.println(i);
       j = current.second.second;
+      //System.out.println("I: "+ i + " J: " + j);
       closedList[i][j] = 1;
-      /*
-        Generating all the 8 successor of this cell
-
-            N.W   N   N.E
-              \   |   /
-               \  |  /
-            W----com.uoft.hacks.seven.shopcircuit.map.Cell----E
-                 / | \
-               /   |  \
-            S.W    S   S.E
-
-        com.uoft.hacks.seven.shopcircuit.map.Cell-->Popped com.uoft.hacks.seven.shopcircuit.map.Cell (i, j)
-        N -->  North       (i-1, j)
-        S -->  South       (i+1, j)
-        E -->  East        (i, j+1)
-        W -->  West           (i, j-1)
-        N.E--> North-East  (i-1, j+1)
-        N.W--> North-West  (i-1, j-1)
-        S.E--> South-East  (i+1, j+1)
-        S.W--> South-West  (i+1, j-1)*/
       double gNew, hNew, fNew;
-      if (isValid(i-1, j))
-      {
-        if (isDestination(i-1, j, dest))
-        {
-          cells[i-1][j].setParent_i(i);
-          cells[i-1][j].setParent_j(j);
-          path = tracePath (cells, dest);
-          foundDest = true;
-          break;
-        }
-        else if (closedList[i-1][j] == 0 && isUnBlocked(i-1, j))
-        {
-          gNew = cells[i][j].getG() + 1.0;
-          hNew = heuristic (i-1, j, dest);
-          fNew = gNew + hNew;
-          if (cells[i-1][j].getF() == Double.MAX_VALUE ||
-              cells[i-1][j].getF() > fNew)
-          {
-            openList.add( new Pair<>(fNew,
-                new Pair<>(i-1, j)));
-            cells[i-1][j].setF(fNew);
-            cells[i-1][j].setG(gNew);
-            cells[i-1][j].setH(hNew);
-            cells[i-1][j].setParent_i(i);
-            cells[i-1][j].setParent_j(j);
-          }
-        }
-      }
-
-
-
-
-      if (isValid(i+1, j))
-      {
-
-
-        if (isDestination(i+1, j, dest))
-        {
-
-          cells[i+1][j].setParent_i(i);
-          cells[i+1][j].setParent_j(j);
+      if (isValid(i - 1, j)) {
+        //System.out.println("inside here: 1");
+        //System.out.println(closedList[i-1][j]);
+        //System.out.println(isUnBlocked(i-1,j));
+        //System.out.println("i-1:" + (i-1) + " j: " + j);
+        //System.out.println("grid[i-1][j]: "+ grid[i - 1][j]);
+        if (isDestination(i - 1, j, dest)) {
+          cells[i - 1][j].setParent_i(i);
+          cells[i - 1][j].setParent_j(j);
           path = tracePath(cells, dest);
           foundDest = true;
           break;
-        }
-
-
-
-        else if (closedList[i+1][j] == 0 &&
-            isUnBlocked(i+1, j) )
-        {
+        } else if (closedList[i - 1][j] == 0 && isUnBlocked(i - 1, j)) {
+          //System.out.println(closedList[i-1][j]);
+          //System.out.println("inside here: else if");
           gNew = cells[i][j].getG() + 1.0;
-          hNew = heuristic(i+1, j, dest);
+          hNew = heuristic(i - 1, j, dest);
           fNew = gNew + hNew;
-
-
-
-
-
-
-
-
-
-          if (cells[i+1][j].getF() == Double.MAX_VALUE || cells[i+1][j].getF() > fNew)
-          {
-            openList.add( new Pair<> (fNew, new Pair<> (i+1, j)));
-
-            cells[i+1][j].setF(fNew);
-            cells[i+1][j].setG(gNew);
-            cells[i+1][j].setH(hNew);
-            cells[i+1][j].setParent_i(i);
-            cells[i+1][j].setParent_j(j);
+          if (cells[i - 1][j].getF() == Double.MAX_VALUE ||
+              cells[i - 1][j].getF() > fNew) {
+            openList.add(new Pair<>(fNew, new Pair<>(i - 1, j)));
+            cells[i - 1][j].setF(fNew);
+            cells[i - 1][j].setG(gNew);
+            cells[i - 1][j].setH(hNew);
+            cells[i - 1][j].setParent_i(i);
+            cells[i - 1][j].setParent_j(j);
           }
         }
       }
-
-
-
-
-      if (isValid (i, j+1))
-      {
-
-
-        if (isDestination(i, j+1, dest))
-        {
-
-          cells[i][j+1].setParent_i(i);
-          cells[i][j+1].setParent_j(j);
+      if (isValid(i + 1, j)) {
+        //System.out.println("inside here: 1");
+        //System.out.println(closedList[i-1][j]);
+        //System.out.println(isUnBlocked(i-1,j));
+        //System.out.println("i+1:" + (i+1) + " j: " + j);
+        //System.out.println("grid[i-1][j]: "+ grid[i + 1][j]);
+        if (isDestination(i + 1, j, dest)) {
+          cells[i + 1][j].setParent_i(i);
+          cells[i + 1][j].setParent_j(j);
           path = tracePath(cells, dest);
           foundDest = true;
           break;
-        }
-
-
-
-
-        else if (closedList[i][j+1] == 0 && isUnBlocked ( i, j+1))
-        {
-          gNew = cells[i][j].getG()+ 1.0;
-          hNew = heuristic (i, j+1, dest);
+        } else if (closedList[i + 1][j] == 0 && isUnBlocked(i + 1, j)) {
+          gNew = cells[i][j].getG() + 1.0;
+          hNew = heuristic(i + 1, j, dest);
           fNew = gNew + hNew;
-          if (cells[i][j+1].getF() == Double.MAX_VALUE ||
-              cells[i][j+1].getF() > fNew)
-          {
-            openList.add( new Pair<>(fNew, new Pair<> (i, j+1)));
-            cells[i][j+1].setF(fNew);
-            cells[i][j+1].setG(gNew);
-            cells[i][j+1].setH(hNew);
-            cells[i][j+1].setParent_i(i);
-            cells[i][j+1].setParent_j(j);
+          if (cells[i + 1][j].getF() == Double.MAX_VALUE || cells[i + 1][j].getF() > fNew) {
+            openList.add(new Pair<>(fNew, new Pair<>(i + 1, j)));
+            cells[i + 1][j].setF(fNew);
+            cells[i + 1][j].setG(gNew);
+            cells[i + 1][j].setH(hNew);
+            cells[i + 1][j].setParent_i(i);
+            cells[i + 1][j].setParent_j(j);
           }
         }
       }
-
-
-
-
-      if (isValid(i, j-1))
-      {
-        if (isDestination(i, j-1, dest))
-        {
-          cells[i][j-1].setParent_i(i);
-          cells[i][j-1].setParent_j(j);
+      if (isValid(i, j + 1)) {
+        if (isDestination(i, j + 1, dest)) {
+          cells[i][j + 1].setParent_i(i);
+          cells[i][j + 1].setParent_j(j);
           path = tracePath(cells, dest);
           foundDest = true;
           break;
-        }
-        else if (closedList[i][j-1] == 0 &&
-            isUnBlocked(i, j-1) )
-        {
+        } else if (closedList[i][j + 1] == 0 && isUnBlocked(i, j + 1)) {
           gNew = cells[i][j].getG() + 1.0;
-          hNew = heuristic(i, j-1, dest);
+          hNew = heuristic(i, j + 1, dest);
           fNew = gNew + hNew;
-          if (cells[i][j-1].getF() == Double.MAX_VALUE ||
-              cells[i][j-1].getF() > fNew)
-          {
-            openList.add( new Pair<> (fNew, new Pair<> (i, j-1)));
-
-
-            cells[i][j-1].setF(fNew);
-            cells[i][j-1].setG(gNew);
-            cells[i][j-1].setH(hNew);
-            cells[i][j-1].setParent_i(i);
-            cells[i][j-1].setParent_j(j);
+          if (cells[i][j + 1].getF() == Double.MAX_VALUE ||
+              cells[i][j + 1].getF() > fNew) {
+            openList.add(new Pair<>(fNew, new Pair<>(i, j + 1)));
+            cells[i][j + 1].setF(fNew);
+            cells[i][j + 1].setG(gNew);
+            cells[i][j + 1].setH(hNew);
+            cells[i][j + 1].setParent_i(i);
+            cells[i][j + 1].setParent_j(j);
           }
         }
       }
-      if (isValid(i-1, j+1))
-      {
-        if (isDestination(i-1, j+1, dest))
-        {
-          cells[i-1][j+1].setParent_i(i);
-          cells[i-1][j+1].setParent_j(j);
-          path = tracePath (cells, dest);
+      if (isValid(i, j - 1)) {
+        if (isDestination(i, j - 1, dest)) {
+          cells[i][j - 1].setParent_i(i);
+          cells[i][j - 1].setParent_j(j);
+          path = tracePath(cells, dest);
           foundDest = true;
           break;
-        }
-        else if (closedList[i-1][j+1] == 0 && isUnBlocked(i-1, j+1))
-        {
-          gNew = cells[i][j].getG() + 1.414;
-          hNew = heuristic(i-1, j+1, dest);
+        } else if (closedList[i][j - 1] == 0 && isUnBlocked(i, j - 1)) {
+          gNew = cells[i][j].getG() + 1.0;
+          hNew = heuristic(i, j - 1, dest);
           fNew = gNew + hNew;
-          if (cells[i-1][j+1].getF() == Double.MAX_VALUE ||
-              cells[i-1][j+1].getF() > fNew)
-          {
-            openList.add( new Pair<> (fNew,
-                new Pair<>(i-1, j+1)));
-            cells[i-1][j+1].setF(fNew);
-            cells[i-1][j+1].setG(gNew);
-            cells[i-1][j+1].setH(hNew);
-            cells[i-1][j+1].setParent_i(i);
-            cells[i-1][j+1].setParent_j(j);
+          if (cells[i][j - 1].getF() == Double.MAX_VALUE ||
+              cells[i][j - 1].getF() > fNew) {
+            openList.add(new Pair<>(fNew, new Pair<>(i, j - 1)));
+            cells[i][j - 1].setF(fNew);
+            cells[i][j - 1].setG(gNew);
+            cells[i][j - 1].setH(hNew);
+            cells[i][j - 1].setParent_i(i);
+            cells[i][j - 1].setParent_j(j);
           }
         }
       }
-      if (isValid (i-1, j-1))
-      {
-        if (isDestination (i-1, j-1, dest))
-        {
-          cells[i-1][j-1].setParent_i(i);
-          cells[i-1][j-1].setParent_j(j);
-          path = tracePath (cells, dest);
+      if (isValid(i - 1, j + 1)) {
+        if (isDestination(i - 1, j + 1, dest)) {
+          cells[i - 1][j + 1].setParent_i(i);
+          cells[i - 1][j + 1].setParent_j(j);
+          path = tracePath(cells, dest);
           foundDest = true;
           break;
-        }
-        else if (closedList[i-1][j-1] == 0 && isUnBlocked(i-1, j-1))
-        {
+        } else if (closedList[i - 1][j + 1] == 0 && isUnBlocked(i - 1, j + 1)) {
           gNew = cells[i][j].getG() + 1.414;
-          hNew = heuristic(i-1, j-1, dest);
+          hNew = heuristic(i - 1, j + 1, dest);
           fNew = gNew + hNew;
-          if (cells[i-1][j-1].getF() == Double.MAX_VALUE ||
-              cells[i-1][j-1].getF() > fNew)
-          {
-            openList.add( new Pair<> (fNew, new Pair<> (i-1, j-1)));
-
-            cells[i-1][j-1].setF(fNew);
-            cells[i-1][j-1].setG(gNew);
-            cells[i-1][j-1].setH(hNew);
-            cells[i-1][j-1].setParent_i(i);
-            cells[i-1][j-1].setParent_j(j);
-          }
-        }
-      }
-      if (isValid(i+1, j+1) )
-      {
-        if (isDestination(i+1, j+1, dest) )
-        {
-          cells[i+1][j+1].setParent_i(i);
-          cells[i+1][j+1].setParent_j(j);
-          path = tracePath (cells, dest);
-          foundDest = true;
-          break;
-        }
-        else if (closedList[i+1][j+1] == 0 &&
-            isUnBlocked(i+1, j+1) )
-        {
-          gNew = cells[i][j].getG() + 1.414;
-          hNew = heuristic(i+1, j+1, dest);
-          fNew = gNew + hNew;
-          if (cells[i+1][j+1].getF() == Double.MAX_VALUE ||
-              cells[i+1][j+1].getF() > fNew)
-          {
+          if (cells[i - 1][j + 1].getF() == Double.MAX_VALUE ||
+              cells[i - 1][j + 1].getF() > fNew) {
             openList.add(new Pair<>(fNew,
-                new Pair<> (i+1, j+1)));
-            cells[i+1][j+1].setF(fNew);
-            cells[i+1][j+1].setG(gNew);
-            cells[i+1][j+1].setH(hNew);
-            cells[i+1][j+1].setParent_i(i);
-            cells[i+1][j+1].setParent_j(j);
+                new Pair<>(i - 1, j + 1)));
+            cells[i - 1][j + 1].setF(fNew);
+            cells[i - 1][j + 1].setG(gNew);
+            cells[i - 1][j + 1].setH(hNew);
+            cells[i - 1][j + 1].setParent_i(i);
+            cells[i - 1][j + 1].setParent_j(j);
           }
         }
       }
-      if (isValid (i+1, j-1))
-      {
-        if (isDestination(i+1, j-1, dest) )
-        {
-          cells[i+1][j-1].setParent_i(i);
-          cells[i+1][j-1].setParent_j(j);
+      if (isValid(i - 1, j - 1)) {
+        if (isDestination(i - 1, j - 1, dest)) {
+          cells[i - 1][j - 1].setParent_i(i);
+          cells[i - 1][j - 1].setParent_j(j);
           path = tracePath(cells, dest);
           foundDest = true;
           break;
-        }
-        else if (closedList[i+1][j-1] == 0 && isUnBlocked(i+1, j-1))
-        {
+        } else if (closedList[i - 1][j - 1] == 0 && isUnBlocked(i - 1, j - 1)) {
           gNew = cells[i][j].getG() + 1.414;
-          hNew = heuristic(i+1, j-1, dest);
+          hNew = heuristic(i - 1, j - 1, dest);
           fNew = gNew + hNew;
-          if (cells[i+1][j-1].getF() == Double.MAX_VALUE ||
-              cells[i+1][j-1].getF() > fNew)
-          {
-            openList.add(new Pair<>(fNew,
-                new Pair<>(i+1, j-1)));
-            cells[i+1][j-1].setF(fNew);
-            cells[i+1][j-1].setG(gNew);
-            cells[i+1][j-1].setH(hNew);
-            cells[i+1][j-1].setParent_i(i);
-            cells[i+1][j-1].setParent_j(j);
+          if (cells[i - 1][j - 1].getF() == Double.MAX_VALUE || cells[i - 1][j - 1].getF() > fNew) {
+            openList.add(new Pair<>(fNew, new Pair<>(i - 1, j - 1)));
+            cells[i - 1][j - 1].setF(fNew);
+            cells[i - 1][j - 1].setG(gNew);
+            cells[i - 1][j - 1].setH(hNew);
+            cells[i - 1][j - 1].setParent_i(i);
+            cells[i - 1][j - 1].setParent_j(j);
+          }
+        }
+      }
+      if (isValid(i + 1, j + 1)) {
+        if (isDestination(i + 1, j + 1, dest)) {
+          cells[i + 1][j + 1].setParent_i(i);
+          cells[i + 1][j + 1].setParent_j(j);
+          path = tracePath(cells, dest);
+          foundDest = true;
+          break;
+        } else if (closedList[i + 1][j + 1] == 0 &&
+            isUnBlocked(i + 1, j + 1)) {
+          gNew = cells[i][j].getG() + 1.414;
+          hNew = heuristic(i + 1, j + 1, dest);
+          fNew = gNew + hNew;
+          if (cells[i + 1][j + 1].getF() == Double.MAX_VALUE ||
+              cells[i + 1][j + 1].getF() > fNew) {
+            openList.add(new Pair<>(fNew, new Pair<>(i + 1, j + 1)));
+            cells[i + 1][j + 1].setF(fNew);
+            cells[i + 1][j + 1].setG(gNew);
+            cells[i + 1][j + 1].setH(hNew);
+            cells[i + 1][j + 1].setParent_i(i);
+            cells[i + 1][j + 1].setParent_j(j);
+          }
+        }
+      }
+      if (isValid(i + 1, j - 1)) {
+        if (isDestination(i + 1, j - 1, dest)) {
+          cells[i + 1][j - 1].setParent_i(i);
+          cells[i + 1][j - 1].setParent_j(j);
+          path = tracePath(cells, dest);
+          foundDest = true;
+          break;
+        } else if (closedList[i + 1][j - 1] == 0 && isUnBlocked(i + 1, j - 1)) {
+          gNew = cells[i][j].getG() + 1.414;
+          hNew = heuristic(i + 1, j - 1, dest);
+          fNew = gNew + hNew;
+          if (cells[i + 1][j - 1].getF() == Double.MAX_VALUE ||
+              cells[i + 1][j - 1].getF() > fNew) {
+            openList.add(new Pair<>(fNew, new Pair<>(i + 1, j - 1)));
+            cells[i + 1][j - 1].setF(fNew);
+            cells[i + 1][j - 1].setG(gNew);
+            cells[i + 1][j - 1].setH(hNew);
+            cells[i + 1][j - 1].setParent_i(i);
+            cells[i + 1][j - 1].setParent_j(j);
           }
         }
       }
     }
     if (!foundDest) {
-      System.out.println("Failed to find the Destination com.uoft.hacks.seven.shopcircuit.map.Cell\n");
+      System.out.println("Failed to find the Destination Cell\n");
       return path;
     }
     return path;
   }
 
-  private Stack<Pair<Integer, Integer>> tracePath(Cell[][] cellDetails, Pair<Integer, Integer> dest) {
+  private Stack<Pair<Integer, Integer>> tracePath(Cell[][] cellDetails,
+      Pair<Integer, Integer> dest) {
     System.out.println("\nThe Path is ");
     int row = dest.first;
     int col = dest.second;
 
     Stack<Pair<Integer, Integer>> Path = new Stack<>();
     Stack<Pair<Integer, Integer>> PathCopy = new Stack<>();
-
-    while (!(cellDetails[row][col].getParent_i() == row && cellDetails[row][col].getParent_j() == col ))
-    {
-      Path.push (new Pair<>(row, col));
-      PathCopy.push (new Pair<>(row, col));
+    System.out.println("row: " + row + " col: " + col);
+    //System.out.println(cellDetails.length);
+    //System.out.println(cellDetails[row].length);
+    //System.out.println(cellDetails[row][col].getParent_j());
+    while (!(cellDetails[row][col].getParent_i() == row
+        && cellDetails[row][col].getParent_j() == col)) {
+      Path.push(new Pair<>(row, col));
+      PathCopy.push(new Pair<>(row, col));
       int temp_row = cellDetails[row][col].getParent_i();
       int temp_col = cellDetails[row][col].getParent_j();
       row = temp_row;
       col = temp_col;
     }
 
-    Path.push (new Pair<> (row, col));
-    PathCopy.push (new Pair<> (row, col));
-    while (!Path.empty())
-    {
-      Pair<Integer,Integer> p = Path.peek();
+    Path.push(new Pair<>(row, col));
+    PathCopy.push(new Pair<>(row, col));
+    while (!Path.empty()) {
+      Pair<Integer, Integer> p = Path.peek();
       Path.pop();
-      System.out.printf("-> (%d,%d) \n", p.first,p.second);
+      System.out.printf("-> (%d,%d) \n", p.first, p.second);
     }
     return PathCopy;
   }
 
-  private boolean isUnBlocked(int row, int col){
-    return grid[row][col] == 0;
+  private boolean isUnBlocked(int row, int col) {
+    return grid[row][col] == 1;
   }
 
-  private boolean isDestination(int row, int col, Pair<Integer, Integer> dest){
-    return dest.first == col && dest.second == row;
+  private boolean isDestination(int row, int col, Pair<Integer, Integer> dest) {
+    return dest.first == row && dest.second == col;
   }
 
-  private boolean isValid(int i, int j){
+  private boolean isValid(int i, int j) {
     return i < x && i >= 0 && j < y && j >= 0;
   }
 
-  private double heuristic(int row, int col, Pair<Integer, Integer> dest){
-    return Math.sqrt((row-dest.first)*(row-dest.first)+(col-dest.second)*(col-dest.second));
+  private double heuristic(int row, int col, Pair<Integer, Integer> dest) {
+    return Math
+        .sqrt((row - dest.first) * (row - dest.first) + (col - dest.second) * (col - dest.second));
   }
 
   private double findDistance(Stack<Pair<Integer, Integer>> path) {
     double distance = 0;
-    while(!path.empty()){
+    while (!path.empty()) {
       Pair<Integer, Integer> first = path.pop();
-      Pair<Integer, Integer> second = path.peek();
-      if (first.first == second.first && first.second != second.second) {
-        distance += 1;
-      } else if (first.first != second.first && first.second == second.second) {
-        distance += 1;
-      } else {
-        distance += 1.4;
+      if (!path.empty()) {
+        Pair<Integer, Integer> second = path.peek();
+
+        if (first.first.equals(second.first) && !first.second
+            .equals(second.second)) {
+          distance += 1;
+        } else if (!first.first.equals(second.first) && first.second
+            .equals(second.second)) {
+          distance += 1;
+        } else {
+          distance += 1.4;
+        }
       }
     }
     return distance;
   }
 
-  private void findPath(List<Pair<Integer, Integer>> nodes, double distance, ArrayList<Stack> path) {
+  private void findPath(Pair<Integer, Integer> start, List<Pair<Integer, Integer>> nodes,
+      double distance, Stack<Pair<Integer, Integer>>[] path, int depth) {
 
     if (nodes.isEmpty() && distance < shortestDistance) {
-      shortestDistance = distance;
+      shortestDistance = distance;// + findDistance(aStarSearch(trueStart, trueEnd));
       shortestPath = path;
+      //System.out.println("AKASJDFL;AKJSDF;LKAJSD;LF " + path.size());
     }
 
-    Pair<Integer, Integer> start = new Pair<Integer, Integer>(0, 0);
     for (int i = 0; i < nodes.size(); i++) {
-      distance += findDistance(aStarSearch(start, nodes.get(i)));
-      path.add(aStarSearch(start, nodes.get(i)));
+      //System.out.print("This is the call for: ");
+      //System.out.print("s_i: " + start.first + " s_j: " + start.second + "towards ====");
+      //System.out.println("i: " + nodes.get(i).first + " j: " + nodes.get(i).getSecond());
+
+      path[depth] = (aStarSearch(start, nodes.get(i)));
       List<Pair<Integer, Integer>> pass = new ArrayList<>(nodes);
       pass.remove(i);
-      findPath(pass, distance + findDistance(aStarSearch(start, nodes.get(i))), path);
+      //System.out.println("i: " + nodes.get(i).first + " j: " + nodes.get(i).getSecond());
+      System.out.println("this is the size " + nodes.size());
+      if (!nodes.isEmpty()) {
+        findPath(nodes.get(i), pass, distance + findDistance(aStarSearch(start, nodes.get(i))),
+            path, depth + 1);
+      }
     }
   }
 
-  public static void main(String arg[])
-  {
+  public static void main(String arg[]) {
     /* Description of the Grid-
      1--> The cell is not blocked
      0--> The cell is blocked    */
 
+    for (int i = 0; i < x; i++) {
+      System.out.print(i + " :");
+      for (int j = 0; j < y; j++) {
+        System.out.print(grid[i][j]);
+      }
+      System.out.println();
 
-    Pair<Integer, Integer> src = new Pair<>(8, 0);
-    Pair<Integer, Integer> dest = new Pair<>(0, 0);
-    (new Map(x,y)).aStarSearch( src, dest);
+    }
+    //Pair<Integer, Integer> src = new Pair<>(4,2);
+    //Pair<Integer, Integer> src = new Pair<>(7,0);
+    //Pair<Integer, Integer> dest = new Pair<>(8,0);
+    //Map map = new Map(x,y);
+    //map.shortestPath.add(map.aStarSearch( src, dest));
+    System.out.println("======================================");
+    //Pair<Integer, Integer> src = new Pair<>(8, 0);
+    // Pair<Integer, Integer> dest = new Pair<>(0, 0);
+    //(new Map(x,y)).aStarSearch( src, dest);
 
+    List nodes = new ArrayList<Pair<Integer, Integer>>();
+    nodes.add(new Pair<>(8, 0));
+    nodes.add(new Pair<>(4, 2));
+    nodes.add(new Pair<>(0, 0));
+    Map map = new Map(x, y, nodes.size());
+    Stack<Pair<Integer, Integer>>[] pathLocal = new Stack[nodes.size()];
+    map.findPath(new Pair<>(7, 8), nodes, 0, pathLocal, 0);
 
-    ArrayList<Pair<Integer, Integer>> toVisit = new ArrayList<>();
-
-
-
-/*
-    {
-      { 1, 0, 1, 1, 1, 1, 0, 1, 1, 1 },
-      { 1, 1, 1, 0, 1, 1, 1, 0, 1, 1 },
-      { 1, 1, 1, 0, 1, 1, 0, 1, 0, 1 },
-      { 0, 0, 1, 0, 1, 0, 0, 0, 0, 1 },
-      { 1, 1, 1, 0, 1, 1, 1, 0, 1, 0 },
-      { 1, 0, 1, 1, 1, 1, 0, 1, 0, 0 },
-      { 1, 0, 0, 0, 0, 1, 0, 0, 0, 1 },
-      { 1, 0, 1, 1, 1, 1, 0, 1, 1, 1 },
-      { 1, 1, 1, 0, 0, 0, 1, 0, 0, 1 }
-    };*/
+    System.out.println(map.shortestPath.length);
+    for (int i = 0; i < map.shortestPath.length; i++) {
+      System.out.println(map.shortestPath[i]);
+    }
   }
 }
 
