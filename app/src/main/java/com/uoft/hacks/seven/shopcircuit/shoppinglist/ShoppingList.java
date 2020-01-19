@@ -1,8 +1,6 @@
 package com.uoft.hacks.seven.shopcircuit.shoppinglist;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 
 public class ShoppingList {

@@ -3,6 +3,7 @@ package com.uoft.hacks.seven.shopcircuit;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import com.uoft.hacks.seven.shopcircuit.map.MapButtonController;
 import com.uoft.hacks.seven.shopcircuit.shoppinglist.ShoppingListButton;
 
 public class MainActivity extends AppCompatActivity {
@@ -14,6 +15,9 @@ public class MainActivity extends AppCompatActivity {
 
     Button shoppingListButton = findViewById(R.id.shoppingListButton);
     shoppingListButton.setOnClickListener(new ShoppingListButton(this));
+
+    Button mapButton = findViewById(R.id.mapButton);
+    mapButton.setOnClickListener(new MapButtonController(this));
 
   }
 }

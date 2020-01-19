@@ -16,7 +16,8 @@
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
-    <activity android:name=".shoppinglist.ShoppingListActivity"/>
+    <activity android:launchMode="singleInstance" android:windowSoftInputMode="adjustPan" android:name=".shoppinglist.ShoppingListActivity"/>
+    <activity android:launchMode="singleInstance" android:name=".map.MapActivity"/>
   </application>
 
 </manifest>
