@@ -1,3 +1,5 @@
+package com.uoft.hacks.seven.shopcircuit.map;
+
 import android.util.Pair;
 import java.util.ArrayList;
 import java.util.List;

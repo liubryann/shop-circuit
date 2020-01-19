@@ -13,4 +13,9 @@
   <string name="shelf">Shelf</string>
   <string name="shopCircuit">shop-circuit</string>
   <string name="findPath">Find optimal path</string>
+  <string name="x1">x1</string>
+  <string name="y1">y1</string>
+  <string name="xsize">xsize</string>
+  <string name="ysize">ysize</string>
+
 </resources>

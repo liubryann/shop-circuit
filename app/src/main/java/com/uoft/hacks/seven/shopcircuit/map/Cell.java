@@ -1,3 +1,5 @@
+package com.uoft.hacks.seven.shopcircuit.map;
+
 public class Cell {
   private int parent_i, parent_j;
   private double f, g, h;

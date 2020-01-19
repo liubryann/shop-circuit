@@ -21,6 +21,71 @@
 
   <LinearLayout
     android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="10dp">
+    <TextView
+      android:layout_width="0dp"
+      android:layout_height="match_parent"
+      android:layout_weight="0.05"
+      android:text="@string/x1"
+      android:gravity="center"/>
+
+    <EditText
+      android:id="@+id/x1"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="0.1"
+      android:layout_marginEnd="10dp"
+      android:inputType="numberPassword"/>
+    <TextView
+      android:layout_width="0dp"
+      android:layout_height="match_parent"
+      android:layout_weight="0.05"
+      android:text="@string/y1"
+      android:gravity="center"/>
+
+    <EditText
+      android:id="@+id/y1"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="0.1"
+      android:layout_marginEnd="10dp"
+      android:inputType="numberPassword"/>
+    <TextView
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_weight="0.07"
+    android:text="@string/xsize"
+    android:gravity="center"/>
+
+    <EditText
+      android:id="@+id/xsize"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="0.1"
+      android:layout_marginEnd="10dp"
+      android:inputType="numberPassword" />
+
+    <TextView
+      android:layout_width="0dp"
+      android:layout_height="match_parent"
+      android:layout_weight="0.07"
+      android:text="@string/ysize"
+      android:gravity="center"/>
+
+    <EditText
+      android:id="@+id/ysize"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="0.1"
+      android:layout_marginEnd="10dp"
+      android:inputType="numberPassword"/>
+
+  </LinearLayout>
+
+  <LinearLayout
+    android:layout_width="match_parent"
     android:layout_height="30dp">
     <Button
       android:layout_width="0dp"
@@ -31,6 +96,7 @@
       android:layout_marginEnd="5dp"
       android:background="@drawable/rounded_20dp"
       android:backgroundTint="@color/lightGrey"
+      android:onClick="addEntrance"
       />
     <Button
       android:layout_width="0dp"
@@ -40,7 +106,8 @@
       android:layout_marginStart="5dp"
       android:layout_marginEnd="5dp"
       android:background="@drawable/rounded_20dp"
-      android:backgroundTint="@color/lightGrey"/>
+      android:backgroundTint="@color/lightGrey"
+      android:onClick="addShelf"/>
     <Button
       android:layout_width="0dp"
       android:layout_height="match_parent"
@@ -49,7 +116,8 @@
       android:layout_marginStart="5dp"
       android:layout_marginEnd="35dp"
       android:background="@drawable/rounded_20dp"
-      android:backgroundTint="@color/lightGrey"/>
+      android:backgroundTint="@color/lightGrey"
+      android:onClick="addExit"/>
 
 
   </LinearLayout>

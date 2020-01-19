@@ -29,9 +29,9 @@ public class ShoppingListActivity extends ListActivity {
   private AutoCompleteTextView actvCategory;
   CheckedTextView cView;
 
-  String[] fruits = {"Apple", "Banana", "Cherry", "Date", "Grape", "Kiwi", "Mango", "Pear"};
+  String[] items = {"Apple", "Banana", "TV", "Laptop", "Chair", "Table", "Tshirt", "Pants", "Toothbrush", "Toothpaste", "Steak", "Fish"};
   //change to items we have in db
-  String[] categories ={"Fruits", "Meat", "Cereal"};
+  String[] categories ={"Fruits", "Meats", "Electronics", "Furniture", "Toiletries" };
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,7 +48,7 @@ public class ShoppingListActivity extends ListActivity {
     adapter = new ArrayAdapter(this, R.layout.item, listItems);
     setListAdapter(adapter);
 
-    itemAdapter = new ArrayAdapter(this, R.layout.autocomplete, fruits);
+    itemAdapter = new ArrayAdapter(this, R.layout.autocomplete, items);
     categoryAdapter = new ArrayAdapter(this, R.layout.autocomplete, categories);
 
     actvItem = findViewById(R.id.autoCompleteItem);

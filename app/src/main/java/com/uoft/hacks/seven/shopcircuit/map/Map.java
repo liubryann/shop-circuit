@@ -1,40 +1,53 @@
+package com.uoft.hacks.seven.shopcircuit.map;
 
 import android.util.Pair;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
-import java.util.Queue;
 import java.util.Stack;
 
 public class Map {
-  private static int grid[][] =
-      {
-          { 1, 0, 1, 1, 1, 1, 0, 1, 1, 1 },
-          { 1, 1, 1, 0, 1, 1, 1, 0, 1, 1 },
-          { 1, 1, 1, 0, 1, 1, 0, 1, 0, 1 },
-          { 0, 0, 1, 0, 1, 0, 0, 0, 0, 1 },
-          { 1, 1, 1, 0, 1, 1, 1, 0, 1, 0 },
-          { 1, 0, 1, 1, 1, 1, 0, 1, 0, 0 },
-          { 1, 0, 0, 0, 0, 1, 0, 0, 0, 1 },
-          { 1, 0, 1, 1, 1, 1, 0, 1, 1, 1 },
-          { 1, 1, 1, 0, 0, 0, 1, 0, 0, 1 }
-      };
-  private static int x = 10;
-  private static int y = 9;
-  private List<Shelf> shelves;
+  private static int grid[][] = {};
+//      {
+//          { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+//          { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+//          { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+//          { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+//          { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+//          { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+//          { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+//          { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+//          { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+//      };
+  private static int x;
+  private static int y;
+  private List<Shelf> shelves = new ArrayList<>();
   private int numShelf;
   private ArrayList<Stack> shortestPath;
   private double shortestDistance;
 
   Map(int x, int y){
+
+    this.x = x;
+    this.y = y;
     grid = new int[x][y];
-    //this.x = x;
-   // this.y = y;
+
+    for (int i = 0; i < x; i++){
+      for (int j = 0; j < y; j++){
+        grid[i][j] = 0;
+      }
+    }
+
     numShelf = 0;
     shortestDistance = Integer.MAX_VALUE;
   }
+
+  public int[][] getGrid(){
+    return grid;
+  }
+
+
 
   public void addShelf(int x, int y, int x_size, int y_size, List<String> categories){
     Shelf shelf = new Shelf(x, y, x_size, y_size, categories);
@@ -42,8 +55,8 @@ public class Map {
     numShelf++;
 
     try{
-      for (int j = y; j < y_size; j++){
-        for (int i = x; i < x_size; i++){
+      for (int i = x; i < x + x_size; i++){
+        for (int j = y; j < y+ y_size; j++){
           grid[j][i] = numShelf;
         }
       }
@@ -59,8 +72,8 @@ public class Map {
     }
 
     try{
-      for (int j = y; j < y_size; j++){
-        for (int i = x; i < x_size; i++){
+      for (int i = x; i < x + x_size; i++){
+        for (int j = y; j < y + y_size; j++){
           grid[j][i] = door;
         }
       }
@@ -108,12 +121,12 @@ public class Map {
             N.W   N   N.E
               \   |   /
                \  |  /
-            W----Cell----E
+            W----com.uoft.hacks.seven.shopcircuit.map.Cell----E
                  / | \
                /   |  \
             S.W    S   S.E
 
-        Cell-->Popped Cell (i, j)
+        com.uoft.hacks.seven.shopcircuit.map.Cell-->Popped com.uoft.hacks.seven.shopcircuit.map.Cell (i, j)
         N -->  North       (i-1, j)
         S -->  South       (i+1, j)
         E -->  East        (i, j+1)
@@ -385,7 +398,7 @@ public class Map {
       }
     }
     if (!foundDest) {
-      System.out.println("Failed to find the Destination Cell\n");
+      System.out.println("Failed to find the Destination com.uoft.hacks.seven.shopcircuit.map.Cell\n");
       return path;
     }
     return path;
