@@ -5,4 +5,7 @@
   <string name="add_item">Add Item</string>
   <string name="clear">Clear</string>
   <string name="delete">Delete</string>
+  <string name="item">Item</string>
+  <string name="category">Category</string>
+  <string name="map">Store Map</string>
 </resources>

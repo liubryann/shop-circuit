@@ -1,27 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:orientation="vertical"
-  tools:context=".MainActivity"
-  android:background="@color/white">
-
-  <View
+  android:orientation="vertical" android:layout_width="match_parent"
+  android:layout_height="match_parent">
+<!--<View-->
+<!--  android:layout_width="wrap_content"-->
+<!--  android:layout_height="0dp"-->
+<!--  android:layout_weight="1"/>-->
+  <TableLayout
+    android:id="@+id/matrix"
     android:layout_width="match_parent"
     android:layout_height="0dp"
-    android:layout_weight="0.3"/>
-  <ImageView
-    android:id="@+id/gifView"
-    android:layout_width="match_parent"
-    android:layout_height="200dp"
-    />
-
-  <View
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="0.3"/>
+    android:layout_weight="1"
+    android:gravity="center"/>
 
   <LinearLayout
     android:layout_width="match_parent"
@@ -29,19 +19,19 @@
     android:orientation="horizontal"
     android:layout_marginTop="10dp">
     <Button
-      android:id="@+id/mapButton"
+      android:id="@+id/mapButtonNothing"
       android:layout_width="0dp"
       android:layout_weight="0.5"
       android:layout_height="match_parent"
       android:text="@string/map"
       android:background="@drawable/rounded_20dp"
-      android:backgroundTint="@color/lightGrey"
+      android:backgroundTint="@color/midGrey"
       android:layout_marginStart="10dp"
       android:layout_marginEnd="5dp"
       android:layout_marginBottom="10dp"
       />
     <Button
-      android:id="@+id/shoppingListButton"
+      android:id="@+id/mapToShoppingListButton"
       android:layout_width="0dp"
       android:layout_height="match_parent"
       android:layout_weight="0.5"
@@ -50,7 +40,8 @@
       android:backgroundTint="@color/lightGrey"
       android:layout_marginStart="5dp"
       android:layout_marginEnd="10dp"
-      android:layout_marginBottom="10dp"/>
+      android:layout_marginBottom="10dp"
+      />
   </LinearLayout>
 
 </LinearLayout>
