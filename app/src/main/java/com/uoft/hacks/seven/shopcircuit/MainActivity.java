@@ -1,5 +1,4 @@
 package com.uoft.hacks.seven.shopcircuit;
-
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
