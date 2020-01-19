@@ -28,7 +28,11 @@ public class Shelf {
   }
 
   public Pair<Integer, Integer> getPosition() {
-    return new Pair<>(x, y);
+    if (x > y) {
+      return new Pair<>(x/2, y + 1);
+    } else {
+      return new Pair<>(x + 1 , y/2);
+    }
   }
 
   public Pair<Integer,Integer> getSize(){

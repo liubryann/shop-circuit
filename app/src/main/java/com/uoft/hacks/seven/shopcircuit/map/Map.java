@@ -361,7 +361,7 @@ public class Map {
   }
 
   private boolean isUnBlocked(int row, int col) {
-    return grid[row][col] == 1;
+    return grid[row][col] == 0;
   }
 
   private boolean isDestination(int row, int col, Pair<Integer, Integer> dest) {
