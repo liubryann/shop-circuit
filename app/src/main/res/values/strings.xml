@@ -8,4 +8,9 @@
   <string name="item">Item</string>
   <string name="category">Category</string>
   <string name="map">Store Map</string>
+  <string name="entrance">Entrance</string>
+  <string name="exit">Exit</string>
+  <string name="shelf">Shelf</string>
+  <string name="shopCircuit">shop-circuit</string>
+  <string name="findPath">Find optimal path</string>
 </resources>

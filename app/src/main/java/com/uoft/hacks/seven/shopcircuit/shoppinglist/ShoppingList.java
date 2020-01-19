@@ -28,9 +28,4 @@ public class ShoppingList {
   public ArrayList<Item> getShoppingList(){
     return shoppingList;
   }
-
-
-
-
-
 }
