@@ -7,10 +7,42 @@
     android:layout_height="20dp"
     android:text="@string/shopping_list"/>
 
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <TextView
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="0.1"
+      android:text="@string/item"
+      />
+    <AutoCompleteTextView
+      android:id="@+id/autoCompleteItem"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="0.4">
+      <requestFocus/>
+    </AutoCompleteTextView>
+    <TextView
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="0.2"
+      android:text="@string/category"
+      />
+    <AutoCompleteTextView
+      android:id="@+id/autoCompleteCategory"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="0.4">
+    </AutoCompleteTextView>
+  </LinearLayout>
+
     <ListView
       android:id="@android:id/list"
       android:layout_width="match_parent"
-      android:layout_height="600dp"
+      android:layout_height="0dp"
+      android:layout_weight="1"
       android:drawSelectorOnTop="true"/>
 
   <LinearLayout
