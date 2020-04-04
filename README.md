@@ -1,5 +1,6 @@
 # shop-circuit
 Submission for UofTHacks VII: Utilizes a pathfinding algorithm visualizer to determine optimal shopping routes. 
+
 [Devpost](https://devpost.com/software/shop-circuit)
 
 ## Inspiration
